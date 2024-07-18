@@ -1,0 +1,1 @@
+export {OffersTableRow} from './OffersTableRow';

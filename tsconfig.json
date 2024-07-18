@@ -1,0 +1,76 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "paths": {
+      "hooks/*": [
+        "./src/hooks/*"
+      ],
+      "tools/*": [
+        "./src/tools/*"
+      ],
+      "constants/*": [
+        "./src/constants/*"
+      ],
+      "components/*": [
+        "./src/components/*"
+      ],
+      "pages/*": [
+        "./src/pages/*"
+      ],
+      "redux-store/*": [
+        "./src/redux-store/*"
+      ],
+      "hocs/*": [
+        "./src/hocs/*"
+      ],
+      "assets/*": [
+        "./public/assets/*"
+      ],
+      "fonts/*": [
+        "./public/fonts/*"
+      ]
+    },
+    "allowJs": true,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "noEmit": false,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false
+  },
+  "include": [
+    "./src/**/*",
+    "./env.d.ts",
+    "./mui.d.ts"
+  ],
+  "exclude": [
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/*.mock.ts"
+  ]
+}
