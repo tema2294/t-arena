@@ -1,10 +1,12 @@
-import {useMemo} from 'react';
-import {ISelectOption} from "redux-store/api";
 import {iconNames} from "components/Icon";
 import {createOption, Select} from "components/Select";
 import {ELanguage, useLocalization} from "hocs/Localization";
 import {LANGUAGE_NAME} from "hocs/Localization/Localization.constants";
 import {THEME_MODE, useTheme} from "hocs/Theme";
+import {LoginForm, RegisterForm} from "pages/Login/component";
+import {useMemo} from 'react';
+import {useSearchParams} from "react-router-dom";
+import {ISelectOption} from "redux-store/api";
 import {
     ControlBar,
     FooterText,
@@ -16,8 +18,6 @@ import {
     SelectContainer,
     ThemeIcon
 } from "./Login.styles";
-import {LoginForm, RegisterForm} from "pages/Login/component";
-import {useSearchParams} from "react-router-dom";
 
 export const Login = () => {
     const {setLanguage, language} = useLocalization();

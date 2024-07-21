@@ -4,10 +4,12 @@ import {EDictionaryKey, useTranslation} from "hocs/Localization";
 import {useTextFieldControl} from "hooks/use-text-field-control";
 import {useState} from "react";
 import {useSearchParams} from "react-router-dom";
-import {DataSlice, IGetTokenResult, useGetTokenMutation} from "redux-store/api";
+import {DataSlice, ILoginResponse, useLoginMutation} from "redux-store/api";
 import {TBaseQueryReturnType} from "redux-store/api/api.types";
 import {setLoginMode} from "redux-store/appState";
 import {useAppDispatch} from "redux-store/hooks";
+import {LOCAL_STORAGE_KEYS} from "../../../../constants/localStorageKeys";
+import {constructLSItem} from "../../../../tools/local-storage";
 import {
     FooterInfo,
     FooterLink,
@@ -22,9 +24,13 @@ import {
 
 export const LoginForm = () => {
     const {translate} = useTranslation();
-    const [getToken, {isLoading, isError: isResponseError}] = useGetTokenMutation();
+    const [getLoginData, {isLoading, isError: isResponseError}] = useLoginMutation();
     const [_, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch();
+    const {setItemData: setAccessToken} = constructLSItem(LOCAL_STORAGE_KEYS.access_token);
+    const {setItemData: setRefreshToken} = constructLSItem(LOCAL_STORAGE_KEYS.refresh_token);
+    const {setItemData: setValidityToken} = constructLSItem(LOCAL_STORAGE_KEYS.validity_token);
+
 
     const [isValidationError, setValidationError] = useState(false);
     const [username, setUsername] = useTextFieldControl('');
@@ -44,12 +50,19 @@ export const LoginForm = () => {
         }
 
         setValidationError(false);
-        const {data} = await getToken({username, password}) as TBaseQueryReturnType<IGetTokenResult>;
+        const {data, error} = await getLoginData({
+            login: username,
+            pass: password
+        }) as TBaseQueryReturnType<ILoginResponse>;
 
-        const {refresh, access} = data || {};
-        const hasData = !!refresh && !!access
+        console.log(data);
+        const {refresh, access, validity} = data || {};
+        const hasData = !!refresh && !!access && !!validity && !error;
 
         if (hasData) {
+            setRefreshToken(refresh);
+            setAccessToken(access);
+            setValidityToken(validity);
             dispatch(DataSlice.util?.resetApiState())
             dispatch(setLoginMode(true))
         }

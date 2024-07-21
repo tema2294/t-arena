@@ -14,6 +14,18 @@ export interface IRegisterQueryParams {
     registration_date: string
 }
 
+
+export interface ILoginRequest {
+    login: string,
+    pass: string
+}
+
+export interface ILoginResponse {
+    validity: string
+    refresh: string,
+    access: string
+}
+
 export interface IRegisterQueryResult {
     id: number
 }

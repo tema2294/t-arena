@@ -3,14 +3,14 @@ import type {BaseQueryFn} from "@reduxjs/toolkit/src/query/baseQueryTypes";
 import {LOCAL_STORAGE_KEYS} from "constants/localStorageKeys";
 import {constructLSItem} from "tools/local-storage";
 import {setLoginMode} from "../appState";
-import {EApiVersions, PROXY_BASE_URL} from "./api.constants";
+import {BASE_URL, EApiVersions} from "./api.constants";
 import {TBaseQueryReturnType} from "./api.types";
 import {updateToken} from "./auth/auth.slice";
 import {IRefreshTokenResult} from "./auth/auth.types";
 
 export const getBaseQuery = (token: string) =>
     fetchBaseQuery({
-        baseUrl: `${PROXY_BASE_URL}/${EApiVersions.V1}`,
+        baseUrl: `${BASE_URL}/${EApiVersions.V1}`,
         prepareHeaders: (headers) => {
             headers.set("Authorization", `Bearer ${token}`);
             headers.set('Content-Type', 'application/json')

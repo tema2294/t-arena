@@ -4,11 +4,17 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-require('dotenv').config({path: path.resolve(__dirname, 'env.example')});
 
 module.exports = (_: any, argv: Record<string, string>) => {
     const {mode} = argv;
     const isDevMode = mode === 'development';
+    const env = require('dotenv').config({path: path.resolve(__dirname, 'env.example')})?.parsed || {};
+
+    // Преобразуем переменные окружения в формат, который ожидает DefinePlugin
+    const envKeys = Object.keys(env).reduce((prev: Record<string, string>, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(env[next]);
+        return prev;
+    }, {});
 
     return {
         entry: './src/index.tsx',
@@ -105,6 +111,10 @@ module.exports = (_: any, argv: Record<string, string>) => {
                 chunks: 'all',
             },
         },
+        infrastructureLogging: {
+            appendOnly: true,
+            level: 'verbose',
+        },
         devServer: {
             historyApiFallback: true,
             static: path.join(__dirname, 'build'),
@@ -112,11 +122,12 @@ module.exports = (_: any, argv: Record<string, string>) => {
             port: 3000,
             proxy: [
                 {
-                    context: ['/TA_Dev/hs/api/fv1/register'],
-                    target: 'https://d77-as.esit.info:21443',
+                    context: ['/api'],
+                    target: env['REACT_APP_API_DEV_BASE_URL'],
+                    secure: false,
                     changeOrigin: true,
-                    logLevel: 'debug'
-                },
+                    pathRewrite: {'^/api': ''}
+                }
             ],
         },
         plugins: [
@@ -124,7 +135,8 @@ module.exports = (_: any, argv: Record<string, string>) => {
                 template: './public/index.html'
             }),
             new webpack.DefinePlugin({
-                APP_MODE: JSON.stringify(mode)
+                APP_MODE: JSON.stringify(mode),
+                ...envKeys,
             }),
             isDevMode && new CircularDependencyPlugin({
                 exclude: /a\.js|node_modules/,

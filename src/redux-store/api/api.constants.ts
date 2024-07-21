@@ -17,6 +17,6 @@ export enum ESpecName {
 }
 
 
-export const PROXY_BASE_URL = IS_DEV ? '' : 'https://d77-as.esit.info:21443';
+export const BASE_URL = IS_DEV ? '' : process.env.REACT_APP_API_BASE_URL;
 
 export const BACKEND_REGISTER_AUTH_KEY = 'RnJvbnQ6ITEyMzQ1cXdlUlQh'

@@ -7,6 +7,8 @@ import {baseQuery} from "./auth.baseQuery";
 import {
     IGetTokenQueryParams,
     IGetTokenResult,
+    ILoginRequest,
+    ILoginResponse,
     IRefreshTokenQueryParams,
     IRefreshTokenResult,
     IRegisterQueryParams,
@@ -44,7 +46,21 @@ const AuthSlice = createApi({
                     headers: {
                         'Authorization': `Basic ${BACKEND_REGISTER_AUTH_KEY}`
                     },
-                    url: '/TA_Dev/hs/api/fv1/register',
+                    url: '/api/register',
+                    method: EApiMethods.Post,
+                }
+            },
+        }),
+        login: builder.mutation<ILoginResponse, ILoginRequest>({
+            query: ({login, pass}) => {
+                const authKey = btoa(`${login}:${pass}`)
+
+                return {
+                    body: {},
+                    url: '/api/token',
+                    headers: {
+                        'Authorization': `Basic ${authKey}`
+                    },
                     method: EApiMethods.Post,
                 }
             },
@@ -72,6 +88,6 @@ const AuthSlice = createApi({
     })
 });
 
-export const {useGetTokenMutation, useUpdateTokenMutation, useRegisterMutation} = AuthSlice;
-export const {getToken, updateToken} = AuthSlice.endpoints;
+export const {useGetTokenMutation, useLoginMutation, useUpdateTokenMutation, useRegisterMutation} = AuthSlice;
+export const {getToken, updateToken, login} = AuthSlice.endpoints;
 export default AuthSlice;
